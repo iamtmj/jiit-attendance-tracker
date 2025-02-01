@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Tracker-JIIT</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>70% Requirement Calculator</h1>
+    <p>Calculate how many classes you need to attend to achieve 70% overall attendance.</p>
+  </header>
+
+  <main>
+    <section class="instructions">
+      <h2>How to Use</h2>
+      <p>Enter your current attendance details below. The tool will calculate how many more classes you need to attend to reach 70% attendance.</p>
+    </section>
+
+    <section class="form-section">
+      <h2>Enter Your Attendance Data</h2>
+      <form id="attendanceForm">
+        <label for="classes-attended">Number of Classes Attended:</label>
+        <input type="number" id="classes-attended" placeholder="e.g., 30" required>
+
+        <label for="total-classes">Total Classes Held So Far:</label>
+        <input type="number" id="total-classes" placeholder="e.g., 50" required>
+        <label for="subject">Select Subject:</label>
+        <select id="subject" name="subject" required>
+        <option value="" disabled selected>Choose a subject</option>
+        <option value="math">Mathematics</option>
+        <option value="phy">Physics</option>
+        <option value="sdf">SDF</option>
+        <option value="uhv">UHV</option>
+        <option value="sdf-lab">SDF-Lab</option>
+        <option value="phy-lab">Phy-Lab</option>
+        <option value="eng">Eng Drawing</option>
+        <option value="life">Life Skills</option>
+        </select>
+
+        <label for="batch">Select Batch:</label>
+        <select id="batch" name="batch" required>
+        <option value="" disabled selected>Choose your batch</option>
+        <option value="A4">A4</option>
+        <option value="B9">B9</option>
+        </select>
+        <button type="submit">Calculate</button>
+      </form>
+    </section>
+
+    <section class="results-section">
+      <h2>Results</h2>
+      <div id="results-output">
+        <!-- Results will be displayed here -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Manan Jindal</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
