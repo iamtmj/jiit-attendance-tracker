@@ -90,6 +90,7 @@ body {
     color: white;
     position: fixed;
     width: 100%;
+    font-family: 'Dancing Script', cursive; 
     bottom: 0;
   }
   select {
