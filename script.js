@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const holidays = [
         "2025-02-10", "2025-02-11", "2025-02-12", "2025-02-13", "2025-02-14",
-        "2025-02-15", "2025-03-14", "2025-03-24", "2025-03-25", "2025-03-26",
+        "2025-02-15", "2025-02-26", "2025-03-14", "2025-03-24", "2025-03-25", "2025-03-26",
         "2025-03-27", "2025-03-28", "2025-03-29", "2025-03-30", "2025-03-31",
         "2025-04-01", "2025-04-10", "2025-04-14"
     ];
@@ -32,12 +32,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const totalInput = document.getElementById("total-classes");
     const resultsOutput = document.getElementById("results-output");
 
-    function calculateRemainingClasses(subject, batch) {
+    function getRemainingClassesList(subject, batch) {
         const today = new Date();
         const semEndDate = new Date("2025-05-07");
-        let remainingClasses = 0;
+        let remainingClassesList = [];
 
-        if (!timetables[batch]) return 0;  // 🚀 Ensures batch exists
+        if (!timetables[batch]) return []; // Ensure batch exists
 
         for (let date = new Date(today); date <= semEndDate; date.setDate(date.getDate() + 1)) {
             const formattedDate = date.toISOString().split("T")[0];
@@ -46,9 +46,16 @@ document.addEventListener("DOMContentLoaded", function () {
             if (holidays.includes(formattedDate) || !timetables[batch][dayOfWeek]) continue;
 
             const daySchedule = timetables[batch][dayOfWeek];
-            remainingClasses += daySchedule[subject] || 0;  // ✅ Adds only if subject exists
+
+            if (daySchedule[subject]) {
+                remainingClassesList.push({
+                    date: formattedDate,
+                    day: dayOfWeek,
+                    count: daySchedule[subject]
+                });
+            }
         }
-        return remainingClasses;
+        return remainingClassesList;
     }
 
     attendanceForm.addEventListener("submit", function (event) {
@@ -59,41 +66,52 @@ document.addEventListener("DOMContentLoaded", function () {
         const attendedClasses = parseInt(attendedInput.value);
         const totalClassesHeld = parseInt(totalInput.value);
 
-        console.log("Subject:", subject);
-        console.log("Batch:", batch);
-        console.log("Attended Classes:", attendedClasses);
-        console.log("Total Classes Held:", totalClassesHeld);
-
         if (!subject || !batch || isNaN(attendedClasses) || isNaN(totalClassesHeld)) {
             resultsOutput.innerHTML = '<p class="error">Please fill all fields correctly.</p>';
             return;
         }
 
-        const remainingClasses = calculateRemainingClasses(subject, batch);
-        console.log("Remaining Classes:", remainingClasses);
+        const remainingClassesList = getRemainingClassesList(subject, batch);
+        const remainingClasses = remainingClassesList.reduce((sum, cls) => sum + cls.count, 0);
 
-        const projectedAttendance = ((attendedClasses + remainingClasses) / (totalClassesHeld + remainingClasses)) * 100;
-        console.log("Projected Attendance:", projectedAttendance);
+        const totalSemesterClasses = totalClassesHeld + remainingClasses;
+        const requiredAttended = Math.ceil(0.7 * totalSemesterClasses);
+        const totalMissable = totalSemesterClasses - requiredAttended;
 
-        let totalSemesterClasses = totalClassesHeld + remainingClasses; // Total possible classes
-        let requiredAttended = Math.ceil(0.7 * totalSemesterClasses); // Minimum classes needed for 70%
-        let totalMissable = totalSemesterClasses - requiredAttended; // Total classes that can be missed
-        
-        let remainingMissable = totalMissable - (totalClassesHeld - attendedClasses); // Future classes you can miss
-        remainingMissable = Math.max(0, remainingMissable); // Ensure it's not negative
-        
+        const classesMissed = totalClassesHeld - attendedClasses;
+        const remainingMissable = Math.max(0, totalMissable - classesMissed);
+
+        // Format remaining classes schedule
+        let classScheduleHTML = "<h3>Remaining Classes Schedule</h3>";
+        let groupedClasses = {};
+
+        remainingClassesList.forEach(cls => {
+            let month = new Date(cls.date).toLocaleString("en-US", { month: "long", year: "numeric" });
+            if (!groupedClasses[month]) {
+                groupedClasses[month] = [];
+            }
+            groupedClasses[month].push(`${cls.date} (${cls.day}): ${cls.count} class(es)`);
+        });
+
+        for (let month in groupedClasses) {
+            classScheduleHTML += `<h4>${month}</h4><ul>`;
+            groupedClasses[month].forEach(entry => {
+                classScheduleHTML += `<li>${entry}</li>`;
+            });
+            classScheduleHTML += "</ul>";
+        }
 
         resultsOutput.innerHTML = `
-    <p>Remaining classes:<strong>${remainingClasses}</strong></p>
-    <p>If you attend all remaining classes, your final attendance will be: <strong>${projectedAttendance.toFixed(2)}%</strong></p>
-    <p>You have already missed <strong>${totalClassesHeld - attendedClasses}</strong> classes.</p>
-    <p>You can miss <strong>${totalMissable}</strong> classes in total to maintain 70% attendance.</p>
-    ${
-        remainingMissable > 0
-            ? `<p>You can still miss <strong>${remainingMissable}</strong> more classes while staying above 70%.</p>`
-            : `<p style="color: red; font-weight: bold;">You cannot miss any more classes! Your attendance will drop below 70%.</p>`
-    }
-`;
-
+            ${classScheduleHTML}
+            <p><strong>Remaining classes:</strong> ${remainingClasses}</p>
+            <p>If you attend all remaining classes, your final attendance will be: <strong>${((attendedClasses + remainingClasses) / totalSemesterClasses * 100).toFixed(2)}%</strong></p>
+            <p>You have already missed <strong>${classesMissed}</strong> classes.</p>
+            <p>You can miss a total of <strong>${totalMissable}</strong> classes to maintain 70% attendance.</p>
+            ${
+                remainingMissable > 0
+                    ? `<p>You can still miss <strong>${remainingMissable}</strong> more classes while staying above 70%.</p>`
+                    : `<p style="color: red; font-weight: bold;">You cannot miss any more classes! Your attendance will drop below 70%.</p>`
+            }
+        `;
     });
 });
