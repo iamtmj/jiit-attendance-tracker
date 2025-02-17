@@ -40,7 +40,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const resultsOutput = document.getElementById("results-output");
 
     function getRemainingClassesList(subject, batch) {
+        const now = new Date();
         const today = new Date();
+        const isTodayComplete = document.getElementById("today-complete").checked;
+        
+        // If user indicated today is complete, start from tomorrow
+        if (isTodayComplete) {
+            today.setDate(today.getDate() + 1);
+        }
+        
         const semEndDate = new Date("2025-05-07");
         let remainingClassesList = [];
 
@@ -65,15 +73,40 @@ document.addEventListener("DOMContentLoaded", function () {
         return remainingClassesList;
     }
 
+    function saveFormData() {
+        const formData = {
+            batch: batchSelect.value,
+            subject: subjectSelect.value,
+            attended: attendedInput.value,
+            total: totalInput.value,
+            percentage: document.getElementById("required-percentage").value
+        };
+        localStorage.setItem('attendanceFormData', JSON.stringify(formData));
+    }
+
+    function loadSavedData() {
+        const saved = localStorage.getItem('attendanceFormData');
+        if (saved) {
+            const data = JSON.parse(saved);
+            batchSelect.value = data.batch;
+            subjectSelect.value = data.subject;
+            attendedInput.value = data.attended;
+            totalInput.value = data.total;
+            document.getElementById("required-percentage").value = data.percentage;
+        }
+    }
+
     attendanceForm.addEventListener("submit", function (event) {
         event.preventDefault();
+        saveFormData();
 
         const subject = subjectSelect.value;
         const batch = batchSelect.value;
         const attendedClasses = parseInt(attendedInput.value);
         const totalClassesHeld = parseInt(totalInput.value);
+        const requiredPercentage = parseFloat(document.getElementById("required-percentage").value) / 100;
 
-        if (!subject || !batch || isNaN(attendedClasses) || isNaN(totalClassesHeld)) {
+        if (!subject || !batch || isNaN(attendedClasses) || isNaN(totalClassesHeld) || isNaN(requiredPercentage)) {
             resultsOutput.innerHTML = '<p class="error">Please fill all fields correctly.</p>';
             return;
         }
@@ -82,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const remainingClasses = remainingClassesList.reduce((sum, cls) => sum + cls.count, 0);
 
         const totalSemesterClasses = totalClassesHeld + remainingClasses;
-        const requiredAttended = Math.ceil(0.7 * totalSemesterClasses);
+        const requiredAttended = Math.ceil(requiredPercentage * totalSemesterClasses);
         const totalMissable = totalSemesterClasses - requiredAttended;
 
         const classesMissed = totalClassesHeld - attendedClasses;
@@ -108,17 +141,31 @@ document.addEventListener("DOMContentLoaded", function () {
             classScheduleHTML += "</ul>";
         }
 
+        const currentAttendance = (attendedClasses / totalClassesHeld) * 100;
+        
+        const progressHTML = `
+            <div class="progress-container">
+                <div class="progress-bar" style="width: ${currentAttendance}%">
+                    <div class="progress-text">${currentAttendance.toFixed(1)}%</div>
+                </div>
+            </div>
+        `;
+
         resultsOutput.innerHTML = `
+            <p><strong>Current Attendance:</strong></p>
+            ${progressHTML}
             ${classScheduleHTML}
             <p><strong>Remaining classes:</strong> ${remainingClasses}</p>
             <p>If you attend all remaining classes, your final attendance will be: <strong>${((attendedClasses + remainingClasses) / totalSemesterClasses * 100).toFixed(2)}%</strong></p>
             <p>You have already missed <strong>${classesMissed}</strong> classes.</p>
-            <p>You can miss a total of <strong>${totalMissable}</strong> classes to maintain 70% attendance.</p>
+            <p>You can miss a total of <strong>${totalMissable}</strong> classes to maintain ${requiredPercentage * 100}% attendance.</p>
             ${
                 remainingMissable > 0
-                    ? `<p>You can still miss <strong>${remainingMissable}</strong> more classes while staying above 70%.</p>`
-                    : `<p style="color: red; font-weight: bold;">You cannot miss any more classes! Your attendance will drop below 70%.</p>`
+                    ? `<p>You can still miss <strong>${remainingMissable}</strong> more classes while staying above ${requiredPercentage * 100}%.</p>`
+                    : `<p style="color: red; font-weight: bold;">You cannot miss any more classes! Your attendance will drop below ${requiredPercentage * 100}%.</p>`
             }
         `;
     });
+
+    loadSavedData();
 });
