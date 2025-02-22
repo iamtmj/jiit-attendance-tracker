@@ -23,7 +23,15 @@ document.addEventListener("DOMContentLoaded", function () {
         "Thursday": {"sdf":1, "phy":1, "uhv":1, "phy-lab":1},
         "Friday": { "phy": 2, "math": 1, "sdf-lab": 1 },
         "Saturday": { "sdf": 1 }
-        }
+        },
+        "A10": {
+        "Monday": { "sdf": 1, "math": 1, "phy": 1, "sdf-lab": 1 },
+        "Tuesday": { "uhv": 1, "sdf": 1, "math": 1, "phy-lab": 1 },
+        "Wednesday": { "uhv": 2, "phy": 2 },
+        "Thursday": { "sdf": 1, "math": 1, "life": 1 },
+        "Friday": { "eng": 1, "phy": 1 },
+        "Saturday": { "math": 1, "sdf": 1 }
+    }
     };
 
     const holidays = [
