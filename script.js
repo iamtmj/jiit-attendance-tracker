@@ -15,6 +15,14 @@ document.addEventListener("DOMContentLoaded", function () {
             "Thursday": { "phy-lab": 1, "sdf": 2, "sdf-lab": 1, "phy": 1 },
             "Friday": { "life": 1, "math": 1, "sdf": 1 },
             "Saturday": {}
+        },
+        "A18": {
+        "Monday": { "math": 1, "eng": 1, "sdf": 1 },
+        "Tuesday": { "math": 1, "uhv": 1 },
+        "Wednesday": { "phy": 1, "uhv": 1, "sdf": 1, "math": 1 ,"life":1},
+        "Thursday": {"sdf":1, "phy":1, "uhv":1, "phy-lab":1},
+        "Friday": { "phy": 2, "math": 1, "sdf-lab": 1 },
+        "Saturday": { "sdf": 1 }
         }
     };
 
