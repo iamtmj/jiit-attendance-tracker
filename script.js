@@ -71,7 +71,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!timetables[batch]) return []; // Ensure batch exists
 
         for (let date = new Date(today); date <= semEndDate; date.setDate(date.getDate() + 1)) {
-            const formattedDate = date.toISOString().split("T")[0];
+            // Use toLocaleDateString with 'en-IN' to ensure IST is considered
+            const formattedDate = date.toLocaleDateString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/').reverse().join('-');
             const dayOfWeek = date.toLocaleString("en-US", { weekday: "long" });
 
             if (holidays.includes(formattedDate) || !timetables[batch][dayOfWeek]) continue;
