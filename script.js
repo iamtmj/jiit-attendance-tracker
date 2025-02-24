@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Clear the cache
+    if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+            cacheNames.forEach(function(cacheName) {
+                caches.delete(cacheName);
+            });
+        });
+    }
+
     const timetables = {
         "A4": {
             "Monday": { "phy-lab": 1, "sdf": 1, "math": 1 },
