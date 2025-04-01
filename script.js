@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "2025-03-27", "2025-03-28", "2025-03-29", "2025-03-30", "2025-03-31",
 
     // April 2025
-    "2025-04-01","2025-04-02","2025-04-10", "2025-04-14"
+    "2025-04-01","2025-04-10", "2025-04-14"
 ];
 
     const attendanceForm = document.getElementById("attendanceForm");
