@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             today.setDate(today.getDate() + 1);
         }
         
-        const semEndDate = new Date("2025-05-07");
+        const semEndDate = new Date("2025-05-05");
         let remainingClassesList = [];
 
         if (!timetables[batch]) return []; // Ensure batch exists
