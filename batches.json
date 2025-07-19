@@ -1,0 +1,23 @@
+{
+  "A4": {
+    "Subjects": ["Probability and Random Processes", "Electronic Devices and Circuits", "Signal and Systems", "Digital Circuit Design", "Economics", "Environmental Studies", "(LAB)Electronic Devices and Circuits", "(LAB)Signals and Systems","(LAB)Digital Circuit Design"],
+    "Codes":["PRP","EDC","SS","DCD","E","EVS","LEDC","LSS","LDCD"],
+    "Monday": { "E": 1, "EVS": 1, "LEDC": 1,"DCD":1,"SS":2},
+    "Tuesday": { "SS": 1, "E": 1, "PRP": 2, "EDC": 1 },
+    "Wednesday": {"E":1,"SS":1,"EDC":2},
+    "Thursday": {"DCD":1,"PRP":1,"EVS":1,"EDC":1,"LSS":1},
+    "Friday": { "PRP": 1, "DCD": 1,"EVS":1 },
+    "Saturday": {"LDCD":1,"DCD":1}
+  },
+  "B9":
+  {
+    "Subjects":["Maths for AI/DS","Theory of Computation","Data Structures","(LAB)Data Structures","Database Management System","(LAB)Database Management System","(LAB)Unix Programming","OOPS Java","Economics","Unix Programming"],
+    "Codes":["AIDS","TOC","DS","LDS","DBMS","LDBMS","LUP","OOPS","E","UP"],
+    "Monday": {"DS":1,"AIDS":2,"TOC":1,"E":1},
+    "Tuesday": {"OOPS":1,"TOC":1,"DBMS":1,"LDS":1},
+    "Wednesday": {"DS":1,"E":2,"TOC":1},
+    "Thursday": {"DS":1,"UP":1,"DBMS":1,"LUP":1},
+    "Friday": {"AIDS":1,"DBMS":1,"LDBMS":1},
+    "Saturday": {"AIDS":1}
+  }
+}
