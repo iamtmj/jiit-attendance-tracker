@@ -166,9 +166,12 @@ function calculateAttendance() {
     Max classes you can miss: <b>${maxMissable}</b>
   `;
 
-  // List all working days till lastWorkingDate with number of classes for selected subject, hide days with 0 classes
+  // List all working days till lastWorkingDate grouped by week, format: Week DD/MM-DD/MM\nDay(DD):classCount
   let workingDays = [];
   const d2 = new Date(Math.max(currentDate, firstWorkingDate));
+  let weekStart = null;
+  let weekEnd = null;
+  let weekBuffer = [];
   while (d2 <= lastWorkingDate) {
     const iso = d2.toISOString().split("T")[0];
     const [year, month, day] = iso.split("-");
@@ -176,11 +179,22 @@ function calculateAttendance() {
     if (!holidays.includes(iso) && schedule[days[d2.getDay()]]) {
       classCount = schedule[days[d2.getDay()]][subjectCode] || 0;
       if (classCount > 0) {
-        // Format as DD/MM/YYYY:classCount
-        workingDays.push(`${day}/${month}/${year}:${classCount}`);
+        // Set week start/end
+        if (!weekStart) weekStart = `${day}/${month}`;
+        weekEnd = `${day}/${month}`;
+        weekBuffer.push(`${days[d2.getDay()].slice(0,3)}(${day}):${classCount} class(es)`);
       }
+    }
+    // If it's Saturday or last day, flush week
+    if (d2.getDay() === 6 || d2.getTime() === lastWorkingDate.getTime()) {
+      if (weekBuffer.length > 0) {
+        workingDays.push(`<b>${weekStart}-${weekEnd}</b><br>${weekBuffer.join('<br>')}`);
+      }
+      weekStart = null;
+      weekEnd = null;
+      weekBuffer = [];
     }
     d2.setDate(d2.getDate() + 1);
   }
-  classSchedule.innerHTML = `<b>Working days till last working date:</b><br>${workingDays.join('<br>')}`;
+  classSchedule.innerHTML = `<b>Working days till last working date:</b><br>${workingDays.join('<br><br>')}`;
 }
