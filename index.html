@@ -1,79 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attendance Tracker-JIIT</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Manager</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Attendance Requirement Calculator</h1>
-    <p>Calculate how many classes you need to attend to achieve the required overall attendance.</p>
-  </header>
+  <main class="container">
+    <h1>Attendance Manager</h1>
+    <form id="attendance-form">
+      <label>Minimum Attendance Criteria (%):
+        <input type="number" id="min-attendance" min="1" max="100" required />
+      </label>
 
-  <main>
-    <section class="instructions">
-      <h2>How to Use</h2>
-      <p>Enter your current attendance details below. The tool will calculate how many more classes you need to attend to reach your target attendance percentage.</p>
-      <div class="required-attendance-container">
-        <label for="required-percentage">Required Attendance Percentage:</label>
-        <input type="number" id="required-percentage" placeholder="e.g., 70" value="70" min="0" max="100" required>
-      </div>
-    </section>
+      <label>Batch:
+        <select id="batch-select" required></select>
+      </label>
 
-    <section class="form-section">
-      <h2>Enter Your Attendance Data</h2>
-      <form id="attendanceForm">
-        <label for="classes-attended">Number of Classes Attended:</label>
-        <input type="number" id="classes-attended" placeholder="e.g., 3" required>
+      <label>Subject:
+        <select id="subject" required></select>
+      </label>
 
-        <label for="total-classes">Total Classes Held So Far:</label>
-        <input type="number" id="total-classes" placeholder="e.g., 5" required>
-        
-        <div class="checkbox-container">
-          <input type="checkbox" id="today-complete" name="today-complete">
-          <label for="today-complete">Today's classes are over</label>
-        </div>
+      <label>Total Classes Elapsed:
+        <input type="number" id="total-elapsed" min="0" required />
+      </label>
 
-        <label for="subject">Select Subject:</label>
-        <select id="subject" name="subject" required>
-        <option value="" disabled selected>Choose a subject</option>
-        <option value="math">Mathematics-II</option>
-        <option value="phy">Physics-II</option>
-        <option value="sdf">SDF-II</option>
-        <option value="uhv">UHV</option>
-        <option value="sdf-lab">SDF-II Lab</option>
-        <option value="phy-lab">Physics-II Lab</option>
-        <option value="eng">Engineering Drawing and Design</option>
-        <option value="life">Life Skills and Communication's Lab</option>
-        </select>
+      <label>Total Classes Attended:
+        <input type="number" id="total-attended" min="0" required />
+      </label>
 
-        <label for="batch">Select Batch:</label>
-        <select id="batch" name="batch" required>
-        <option value="" disabled selected>Choose your batch</option>
-        <option value="A4">A4</option>
-        <option value="A10">A10</option>
-        <option value="A18">A18</option>
-        <option value="B9">B9</option>
-        
-        </select>
-        <button type="submit">Calculate</button>
-      </form>
-    </section>
+      <label>
+        <input type="checkbox" id="today-complete" />
+        Today’s classes are complete
+      </label>
 
-    <section class="results-section">
-      <h2>Results</h2>
-      <div id="results-output">
-        <!-- Results will be displayed here -->
-      </div>
-    </section>
+      <button type="submit">Calculate</button>
+    </form>
+
+    <section id="result"></section>
+    <section id="class-schedule"></section>
   </main>
 
-  <footer>
-    <p>Developed by Manan Jindal</p>
-  </footer>
   <script src="script.js"></script>
 </body>
 </html>
