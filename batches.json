@@ -14,7 +14,7 @@
     "Subjects":["Maths for AI/DS","Theory of Computation","Data Structures","(LAB)Data Structures","Database Management System","(LAB)Database Management System","(LAB)Unix Programming","OOPS Java","Economics","Unix Programming"],
     "Codes":["AIDS","TOC","DS","LDS","DBMS","LDBMS","LUP","OOPS","E","UP"],
     "Monday": {"DS":1,"AIDS":2,"TOC":1,"E":1},
-    "Tuesday": {"OOPS":1,"TOC":1,"DBMS":1,"LDS":1},
+    "Tuesday": {"OOPS":1,"TOC":1,"DBMS":1,"LDS":1,"DS":1},
     "Wednesday": {"DS":1,"E":2,"TOC":1},
     "Thursday": {"DS":1,"UP":1,"DBMS":1,"LUP":1},
     "Friday": {"AIDS":1,"DBMS":1,"LDBMS":1},
