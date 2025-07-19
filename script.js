@@ -1,197 +1,186 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Clear the cache
-    if ('caches' in window) {
-        caches.keys().then(function(cacheNames) {
-            cacheNames.forEach(function(cacheName) {
-                caches.delete(cacheName);
-            });
-        });
-    }
-
-    const timetables = {
-        "A4": {
-            "Monday": { "phy-lab": 1, "sdf": 1, "math": 1 },
-            "Tuesday": { "eng": 1, "sdf": 1, "math": 1, "phy": 1 },
-            "Wednesday": { "uhv": 2, "math": 1, "phy": 1, "sdf": 1, "sdf-lab": 1 },
-            "Thursday": { "uhv": 1, "math": 1, "sdf": 1 },
-            "Friday": { "life": 1, "phy": 2 },
-            "Saturday": {}
-        },
-        "B9": {
-            "Monday": { "phy": 2, "math": 1 },
-            "Tuesday": { "math": 2, "uhv": 1, "sdf": 1 },
-            "Wednesday": { "eng": 1, "uhv": 2, "phy": 1 },
-            "Thursday": { "phy-lab": 1, "sdf": 2, "sdf-lab": 1, "phy": 1 },
-            "Friday": { "life": 1, "math": 1, "sdf": 1 },
-            "Saturday": {}
-        },
-        "A18": {
-        "Monday": { "math": 1, "eng": 1, "sdf": 1 },
-        "Tuesday": { "math": 1, "uhv": 1 },
-        "Wednesday": { "phy": 1, "uhv": 1, "sdf": 1, "math": 1 ,"life":1},
-        "Thursday": {"sdf":1, "phy":1, "uhv":1, "phy-lab":1},
-        "Friday": { "phy": 2, "math": 1, "sdf-lab": 1 },
-        "Saturday": { "sdf": 1 }
-        },
-        "A10": {
-        "Monday": { "sdf": 1, "math": 1, "phy": 1, "sdf-lab": 1 },
-        "Tuesday": { "uhv": 1, "sdf": 1, "math": 1, "phy-lab": 1 },
-        "Wednesday": { "uhv": 2, "phy": 2 },
-        "Thursday": { "sdf": 1, "math": 1, "life": 1 },
-        "Friday": { "eng": 1, "phy": 1 },
-        "Saturday": { "math": 1, "sdf": 1 }
-    }
-    };
-
-    const holidays = [
-    // February 2025
-    "2025-02-10", "2025-02-11", "2025-02-12", "2025-02-13", "2025-02-14",
-    "2025-02-15", "2025-02-26","2025-02-28","2025-03-1",
-
-    // March 2025
-    "2025-03-03","2025-03-10", "2025-03-11", "2025-03-12", "2025-03-13", "2025-03-14",
-    "2025-03-15", "2025-03-16", "2025-03-24", "2025-03-25", "2025-03-26",
-    "2025-03-27", "2025-03-28", "2025-03-29", "2025-03-30", "2025-03-31",
-
-    // April 2025
-    "2025-04-01","2025-04-10", "2025-04-14"
+const lastWorkingDate = new Date("2025-11-29");
+const holidays = [
+  "2025-08-9",
+  "2025-08-15",
+  "2025-08-16",
+  "2025-8-29",
+  "2025-8-30",
+  "2025-8-31",
+  "2025-9-1",
+  "2025-9-2",
+  "2025-9-3",
+  "2025-9-4",
+  "2025-9-5",
+  "2025-9-6",
+  "2025-10-02",
+  "2025-10-10",
+  "2025-10-11",
+  "2025-10-12",
+  "2025-10-13",
+  "2025-10-14",
+  "2025-10-15",
+  "2025-10-16",
+  "2025-10-17",
+  "2025-10-18",
+  "2025-10-19",
+  "2025-10-20",
+  "2025-10-21",
+  "2025-10-22",
+  "2025-10-23",
+  "2025-10-24",
+  "2025-10-25",
+  "2025-10-26",
+  "2025-11-5"
 ];
 
-    const attendanceForm = document.getElementById("attendanceForm");
-    const subjectSelect = document.getElementById("subject");
-    const batchSelect = document.getElementById("batch");
-    const attendedInput = document.getElementById("classes-attended");
-    const totalInput = document.getElementById("total-classes");
-    const resultsOutput = document.getElementById("results-output");
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+let batchData = {};
 
-    function getRemainingClassesList(subject, batch) {
-        const now = new Date();
-        const today = new Date();
-        const isTodayComplete = document.getElementById("today-complete").checked;
-        
-        // If user indicated today is complete, start from tomorrow
-        if (isTodayComplete) {
-            today.setDate(today.getDate() + 1);
-        }
-        
-        const semEndDate = new Date("2025-05-09");
-        let remainingClassesList = [];
+window.addEventListener("DOMContentLoaded", async () => {
+  const batchSelect = document.getElementById("batch-select");
+  const subjectSelect = document.getElementById("subject");
 
-        if (!timetables[batch]) return []; // Ensure batch exists
+  try {
+    const response = await fetch("batches.json");
+    batchData = await response.json();
 
-        for (let date = new Date(today); date <= semEndDate; date.setDate(date.getDate() + 1)) {
-            // Use toLocaleDateString with 'en-IN' to ensure IST is considered
-            const formattedDate = date.toLocaleDateString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/').reverse().join('-');
-            const dayOfWeek = date.toLocaleString("en-US", { weekday: "long" });
-
-            if (holidays.includes(formattedDate) || !timetables[batch][dayOfWeek]) continue;
-
-            const daySchedule = timetables[batch][dayOfWeek];
-
-            if (daySchedule[subject]) {
-                remainingClassesList.push({
-                    date: formattedDate,
-                    day: dayOfWeek,
-                    count: daySchedule[subject]
-                });
-            }
-        }
-        return remainingClassesList;
+    for (const batchName in batchData) {
+      const option = document.createElement("option");
+      option.value = batchName;
+      option.textContent = batchName;
+      batchSelect.appendChild(option);
     }
 
-    function saveFormData() {
-        const formData = {
-            batch: batchSelect.value,
-            subject: subjectSelect.value,
-            attended: attendedInput.value,
-            total: totalInput.value,
-            percentage: document.getElementById("required-percentage").value
-        };
-        localStorage.setItem('attendanceFormData', JSON.stringify(formData));
-    }
-
-    function loadSavedData() {
-        const saved = localStorage.getItem('attendanceFormData');
-        if (saved) {
-            const data = JSON.parse(saved);
-            batchSelect.value = data.batch;
-            subjectSelect.value = data.subject;
-            attendedInput.value = data.attended;
-            totalInput.value = data.total;
-            document.getElementById("required-percentage").value = data.percentage;
-        }
-    }
-
-    attendanceForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        saveFormData();
-
-        const subject = subjectSelect.value;
-        const batch = batchSelect.value;
-        const attendedClasses = parseInt(attendedInput.value);
-        const totalClassesHeld = parseInt(totalInput.value);
-        const requiredPercentage = parseFloat(document.getElementById("required-percentage").value) / 100;
-
-        if (!subject || !batch || isNaN(attendedClasses) || isNaN(totalClassesHeld) || isNaN(requiredPercentage)) {
-            resultsOutput.innerHTML = '<p class="error">Please fill all fields correctly.</p>';
-            return;
-        }
-
-        const remainingClassesList = getRemainingClassesList(subject, batch);
-        const remainingClasses = remainingClassesList.reduce((sum, cls) => sum + cls.count, 0);
-
-        const totalSemesterClasses = totalClassesHeld + remainingClasses;
-        const requiredAttended = Math.ceil(requiredPercentage * totalSemesterClasses);
-        const totalMissable = totalSemesterClasses - requiredAttended;
-
-        const classesMissed = totalClassesHeld - attendedClasses;
-        const remainingMissable = Math.max(0, totalMissable - classesMissed);
-
-        // Format remaining classes schedule
-        let classScheduleHTML = "<h3>Remaining Classes Schedule</h3>";
-        let groupedClasses = {};
-
-        remainingClassesList.forEach(cls => {
-            let month = new Date(cls.date).toLocaleString("en-US", { month: "long", year: "numeric" });
-            if (!groupedClasses[month]) {
-                groupedClasses[month] = [];
-            }
-            groupedClasses[month].push(`${cls.date} (${cls.day}): ${cls.count} class(es)`);
+    // Helper to populate subjects with names
+    function populateSubjects(batchName) {
+      subjectSelect.innerHTML = "";
+      const selectedBatch = batchData[batchName];
+      if (selectedBatch && selectedBatch.Codes && selectedBatch.Subjects) {
+        selectedBatch.Codes.forEach((code, idx) => {
+          const option = document.createElement("option");
+          option.value = code;
+          option.textContent = selectedBatch.Subjects[idx]; // Only subject name
+          subjectSelect.appendChild(option);
         });
+      }
+    }
 
-        for (let month in groupedClasses) {
-            classScheduleHTML += `<h4>${month}</h4><ul>`;
-            groupedClasses[month].forEach(entry => {
-                classScheduleHTML += `<li>${entry}</li>`;
-            });
-            classScheduleHTML += "</ul>";
-        }
-
-        const currentAttendance = (attendedClasses / totalClassesHeld) * 100;
-        
-        const progressHTML = `
-            <div class="progress-container">
-                <div class="progress-bar" style="width: ${currentAttendance}%">
-                    <div class="progress-text">${currentAttendance.toFixed(1)}%</div>
-                </div>
-            </div>
-        `;
-
-        resultsOutput.innerHTML = `
-            <p><strong>Current Attendance:</strong></p>
-            ${progressHTML}
-            ${classScheduleHTML}
-            <p><strong>Remaining classes:</strong> ${remainingClasses}</p>
-            <p>If you attend all remaining classes, your final attendance will be: <strong>${((attendedClasses + remainingClasses) / totalSemesterClasses * 100).toFixed(2)}%</strong></p>
-            <p>You have already missed <strong>${classesMissed}</strong> classes.</p>
-            <p>You can miss a total of <strong>${totalMissable}</strong> classes to maintain ${requiredPercentage * 100}% attendance.</p>
-            ${
-                remainingMissable > 0
-                    ? `<p>You can still miss <strong>${remainingMissable}</strong> more classes while staying above ${requiredPercentage * 100}%.</p>`
-                    : `<p style="color: red; font-weight: bold;">You cannot miss any more classes! Your attendance will drop below ${requiredPercentage * 100}%.</p>`
-            }
-        `;
+    batchSelect.addEventListener("change", () => {
+      populateSubjects(batchSelect.value);
     });
 
-    loadSavedData();
+    // Populate subjects for the first batch by default
+    if (batchSelect.options.length > 0) {
+      batchSelect.selectedIndex = 0;
+      populateSubjects(batchSelect.value);
+    }
+  } catch (err) {
+    console.error("Failed to load batch data:", err);
+  }
+
+  // Disable calculate button until all fields are filled
+  const form = document.getElementById("attendance-form");
+  const calculateBtn = form.querySelector("button[type='submit']");
+  function validateForm() {
+    const minAttendance = document.getElementById("min-attendance").value;
+    const totalElapsed = document.getElementById("total-elapsed").value;
+    const totalAttended = document.getElementById("total-attended").value;
+    const batch = batchSelect.value;
+    const subject = subjectSelect.value;
+    calculateBtn.disabled = !(minAttendance && totalElapsed && totalAttended && batch && subject);
+  }
+  form.addEventListener("input", validateForm);
+  form.addEventListener("change", validateForm);
+  validateForm();
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    calculateAttendance();
+  });
 });
+
+function calculateAttendance() {
+  const minAttendance = parseFloat(document.getElementById("min-attendance").value);
+  let totalElapsed = parseInt(document.getElementById("total-elapsed").value);
+  let totalAttended = parseInt(document.getElementById("total-attended").value);
+  const batch = document.getElementById("batch-select").value;
+  const subjectCode = document.getElementById("subject").value;
+  const todayComplete = document.getElementById("today-complete").checked;
+
+  const schedule = batchData[batch];
+  if (!schedule) return;
+
+  // Set first working day
+  const firstWorkingDate = new Date("2025-07-24");
+  const currentDate = new Date();
+  // If today's classes are complete, skip today in future calculation
+  if (todayComplete) {
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  // If calculating before first working day, assume 0 classes attended and happened
+  if (currentDate < firstWorkingDate) {
+    totalElapsed = 0;
+    totalAttended = 0;
+  }
+
+  let remaining = 0;
+  // Start from max(currentDate, firstWorkingDate)
+  const d = new Date(Math.max(currentDate, firstWorkingDate));
+  while (d <= lastWorkingDate) {
+    const iso = d.toISOString().split("T")[0];
+    const weekday = days[d.getDay()];
+    if (!holidays.includes(iso) && schedule[weekday] && schedule[weekday][subjectCode]) {
+      remaining += schedule[weekday][subjectCode];
+    }
+    d.setDate(d.getDate() + 1);
+  }
+
+  const result = document.getElementById("result");
+  const classSchedule = document.getElementById("class-schedule");
+
+  if (remaining === 0) {
+    result.textContent = "No upcoming classes found.";
+    classSchedule.textContent = "";
+    return;
+  }
+
+  let maxMissable = 0;
+  for (let x = 0; x <= remaining; x++) {
+    const attendedNew = totalAttended + (remaining - x);
+    const totalNew = totalElapsed + remaining;
+    const percentage = (attendedNew / totalNew) * 100;
+    if (percentage >= minAttendance) maxMissable = x;
+    else break;
+  }
+
+  // Show subject name in result
+  let subjectName = subjectCode;
+  if (schedule.Codes && schedule.Subjects) {
+    const idx = schedule.Codes.indexOf(subjectCode);
+    if (idx !== -1) subjectName = schedule.Subjects[idx]; // Only subject name
+  }
+
+  result.innerHTML = `
+    Remaining <b>${subjectName} Classes</b>: <b>${remaining}</b><br>
+    Max classes you can miss: <b>${maxMissable}</b>
+  `;
+
+  // List all working days till lastWorkingDate with number of classes for selected subject, hide days with 0 classes
+  let workingDays = [];
+  const d2 = new Date(Math.max(currentDate, firstWorkingDate));
+  while (d2 <= lastWorkingDate) {
+    const iso = d2.toISOString().split("T")[0];
+    const [year, month, day] = iso.split("-");
+    let classCount = 0;
+    if (!holidays.includes(iso) && schedule[days[d2.getDay()]]) {
+      classCount = schedule[days[d2.getDay()]][subjectCode] || 0;
+      if (classCount > 0) {
+        // Format as DD/MM/YYYY:classCount
+        workingDays.push(`${day}/${month}/${year}:${classCount}`);
+      }
+    }
+    d2.setDate(d2.getDate() + 1);
+  }
+  classSchedule.innerHTML = `<b>Working days till last working date:</b><br>${workingDays.join('<br>')}`;
+}
