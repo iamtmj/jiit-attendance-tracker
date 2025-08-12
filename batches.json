@@ -4,9 +4,9 @@
     "Codes":["PRP","EDC","SS","DCD","E","EVS","LEDC","LSS","LDCD"],
     "Monday": { "E": 1, "EVS": 1, "LEDC": 1,"DCD":1,"SS":2},
     "Tuesday": { "SS": 1, "E": 1, "PRP": 2, "EDC": 1 },
-    "Wednesday": {"E":1,"SS":1,"EDC":2},
+    "Wednesday": {"E":1,"SS":1,"EDC":2,"DCD": 1},
     "Thursday": {"DCD":1,"PRP":1,"EVS":1,"EDC":1,"LSS":1},
-    "Friday": { "PRP": 1, "DCD": 1,"EVS":1 },
+    "Friday": { "PRP": 1, "EVS":1 },
     "Saturday": {"LDCD":1,"DCD":1}
   },
   "B9":
