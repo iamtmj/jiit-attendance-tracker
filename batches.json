@@ -19,5 +19,16 @@
     "Thursday": {"DS":1,"UP":2,"DBMS":1},
     "Friday": {"AIDS":1,"DBMS":1,"LDBMS":1},
     "Saturday": {"AIDS":1}
+  },
+  "A7":
+  {
+    "Subjects": ["Probability and Random Processes", "Electronic Devices and Circuits", "Signal and Systems", "Digital Circuit Design", "Economics", "Environmental Studies", "(LAB)Electronic Devices and Circuits", "(LAB)Signals and Systems","(LAB)Digital Circuit Design"],
+    "Codes":["PRP","EDC","SS","DCD","E","EVS","LEDC","LSS","LDCD"],
+    "Monday":{"ECO":1,"EVS":1,"PRP":1,"SNS":1,"DCD":1,"LDCD":1}.
+    "Tuesday":{"ECO":2,"EDC":2,"SNS":2},
+    "Wednesday":{"SNS":1,"PRP":2,"DCD":1,"EDC":1},
+    "Thursday":{"LEDC":1,"EVS":1,"EDC":1},
+    "Friday":{"LSS":1,"DCD":2,"EVS":1},
+    "Saturday":{"PRP":1}
   }
 }
