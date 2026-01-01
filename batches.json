@@ -1,34 +1,23 @@
 {
-  "A4": {
-    "Subjects": ["Probability and Random Processes", "Electronic Devices and Circuits", "Signal and Systems", "Digital Circuit Design", "Economics", "Environmental Studies", "(LAB)Electronic Devices and Circuits", "(LAB)Signals and Systems","(LAB)Digital Circuit Design"],
-    "Codes":["PRP","EDC","SS","DCD","E","EVS","LEDC","LSS","LDCD"],
-    "Monday": { "E": 1, "EVS": 1, "LEDC": 1,"DCD":1,"SS":2},
-    "Tuesday": { "SS": 1, "E": 1, "PRP": 2, "EDC": 1 },
-    "Wednesday": {"E":1,"SS":1,"EDC":2,"DCD": 1},
-    "Thursday": {"DCD":1,"PRP":1,"EVS":1,"EDC":1,"LSS":1},
-    "Friday": { "PRP": 1, "EVS":1 },
-    "Saturday": {"LDCD":1,"DCD":1}
+  "A7": {
+    "Subjects": ["Digital Signal Processing", "Analogue and Digital Communication", "Analogue Electronics", "Telecommunication Networks","(LAB)Analogue Electronics", "(LAB)Digital Signal Processing","(LAB)Analogue and Digital Communication"],
+    "Codes":["DSP","ADC","AE","TN","LAE","LDSP","LADC"],
+    "Monday": {"ADC":1,"AE":1},
+    "Tuesday": {"DSP":2,"TN":1,"LADC":1},
+    "Wednesday": {"AE":1,"DSP":1,"LAE":1},
+    "Thursday": {"ADC":1,"LDSP":1,"TN":1},
+    "Friday": {"AE":1,"ADC":1,"TN":1},
+    "Saturday": {"DSP":1,"AE":1}
   },
   "B9":
   {
-    "Subjects":["Maths for AI/DS","Theory of Computation","Data Structures","(LAB)Data Structures","Database Management System","(LAB)Database Management System","OOPS Java","Economics","Unix Programming"],
-    "Codes":["AIDS","TOC","DS","LDS","DBMS","LDBMS","OOPS","E","UP"],
-    "Monday": {"DS":1,"AIDS":2,"TOC":1,"E":1},
-    "Tuesday": {"OOPS":1,"TOC":1,"DBMS":1,"LDS":1,"DS":1},
-    "Wednesday": {"DS":1,"E":2,"TOC":1},
-    "Thursday": {"DS":1,"UP":2,"DBMS":1},
-    "Friday": {"AIDS":1,"DBMS":1,"LDBMS":1},
-    "Saturday": {"AIDS":1}
-  },
-  "A7":
-  {
-    "Subjects": ["Probability and Random Processes", "Electronic Devices and Circuits", "Signal and Systems", "Digital Circuit Design", "Economics", "Environmental Studies", "(LAB)Electronic Devices and Circuits", "(LAB)Signals and Systems","(LAB)Digital Circuit Design"],
-    "Codes":["PRP","EDC","SNS","DCD","ECO","EVS","LEDC","LSS","LDCD"],
-    "Monday":{"ECO":1,"EVS":1,"PRP":1,"SNS":1,"DCD":1,"LDCD":1},
-    "Tuesday":{"ECO":2,"EDC":2,"SNS":2},
-    "Wednesday":{"SNS":1,"PRP":2,"DCD":1,"EDC":1},
-    "Thursday":{"LEDC":1,"EVS":1,"EDC":1},
-    "Friday":{"LSS":1,"DCD":2,"EVS":1},
-    "Saturday":{"PRP":1}
+    "Subjects":["Design and Analysis of Algorithms","AI/ML","Software Engineering","Digital System and Computer Organisation","(LAB)Digital System and Computer Organisation","(LAB)Design and Analysis of Algorithms","(LAB)AI/ML","Environmental Studies","Competitive Programming"],
+    "Codes":["DAA","AI","SE","DSCO","LDSCO","LDAA","LAI","EVS","CP"],
+    "Monday": {"EVS":1,"DSCO":1,"AI":1},
+    "Tuesday": {"EVS":1,"CP":1,"DAA":1,"AI":1},
+    "Wednesday": {"DSCO":1,"SE":1,"DAA":1,"AI":1,"LDSCO":1},
+    "Thursday": {"LDAA":1,"LAI":1,"CP":1},
+    "Friday": {"SE":2,"DBMS":1,"LDBMS":1},
+    "Saturday": {"DAA":2,"EVS":1,"DSCO":1}
   }
 }
