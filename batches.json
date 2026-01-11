@@ -13,11 +13,11 @@
   {
     "Subjects":["Design and Analysis of Algorithms","AI/ML","Software Engineering","Digital System and Computer Organisation","(LAB)Digital System and Computer Organisation","(LAB)Design and Analysis of Algorithms","(LAB)AI/ML","Environmental Studies","Competitive Programming","HSS","DE","(LAB)DE"],
     "Codes":["DAA","AI","SE","DSCO","LDSCO","LDAA","LAI","EVS","CP","HSS","DE","LDE"],
-    "Monday": {"EVS":1,"DSCO":1,"AI":1,"HSS":1,"DE":1},
-    "Tuesday": {"EVS":1,"CP":1,"DAA":1,"AI":1,"HSS":1,"DE":1},
-    "Wednesday": {"DSCO":1,"SE":1,"DAA":1,"AI":1,"LDSCO":1},
-    "Thursday": {"LDAA":1,"LAI":1,"CP":1,"HSS":1},
-    "Friday": {"SE":2,"DBMS":1,"LDBMS":1,"LDE":1},
-    "Saturday": {"DAA":2,"EVS":1,"DSCO":1}
+    "Monday": {"EVS":1,"DAA":1,"AI":1,"HSS":1,"DE":1,"DSCO":1,"SE":1},
+    "Tuesday": {"AI":1,"DE":1,"HSS":1,"DAA":1,"EVS":1,"CP":1},
+    "Wednesday": {"LDSCO":1,"DSCO":1,"SE":1,"DAA":1,"AI":1},
+    "Thursday": {"LDAA":1,"LAI":1,"HSS":1,"CP":1,"EVS":1},
+    "Friday": {"SE":1},
+    "Saturday": {"DAA":1,"DSCO":1,"LDE":1}
   }
 }
