@@ -20,4 +20,15 @@
     "Friday": {"SE":1},
     "Saturday": {"DAA":1,"DSCO":1,"LDE":1}
   }
+  "A17":
+  {
+    "Subjects":["SDF-2 Lab","SDF-2","Physics-2","Mathematics-2","UHV","UHV Lab","Physics-2 Lab","Workshop"],
+    "Codes":["LSDF","SDF","P","M","U","LUHV","LP","W"],
+    "Monday":{},
+    "Tuesday":{"LSDF":1,"SDF":1,"P":1,"M":1},
+    "Wednesday":{"U":1,"SDF":1,"P":1,"M":1,"LP":1},
+    "Thursday":{"M":2,"P":1,"U":1},
+    "Friday":{"W":2,"SDF":1,"U":1,"P":1},
+    "Saturday":{"LUHV":1,"SDF":1}
+  }
 }
