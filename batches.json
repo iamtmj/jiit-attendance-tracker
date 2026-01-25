@@ -19,7 +19,7 @@
     "Thursday": {"LDAA":1,"LAI":1,"HSS":1,"CP":1,"EVS":1},
     "Friday": {"SE":1},
     "Saturday": {"DAA":1,"DSCO":1,"LDE":1}
-  }
+  },
   "A17":
   {
     "Subjects":["SDF-2 Lab","SDF-2","Physics-2","Mathematics-2","UHV","UHV Lab","Physics-2 Lab","Workshop"],
