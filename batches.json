@@ -5,9 +5,9 @@
     "Monday": {"ADC":1,"AE":1,"HS":1,"DE":1},
     "Tuesday": {"DSP":2,"TN":1,"LADC":1,"HS":1,"DE":1},
     "Wednesday": {"ADC":1,"AE":1,"DSP":1,"LAE":1,"HS":1},
-    "Thursday": {"ADC":1,"LDSP":1,"TN":1,"DE":1},
+    "Thursday": {"ADC":1,"LDSP":1,"DSP":1,"TN":1,"DE":1},
     "Friday": {"AE":1,"ADC":1,"TN":1},
-    "Saturday": {"DSP":1,"AE":1}
+    "Saturday": {"AE":1}
   },
   "B9":
   {
