@@ -30,5 +30,16 @@
     "Thursday":{"M":2,"P":1,"U":1},
     "Friday":{"W":2,"SDF":1,"U":1,"P":1},
     "Saturday":{"LUHV":1,"SDF":1}
+  },
+  "A18":
+  {
+    "Subjects":["Digital Signal Processing", "Analogue and Digital Communication", "Linear Algebra", "Telecommunication Networks","(LAB)Telecommunication Networks", "(LAB)Digital Signal Processing","(LAB)Linear Algebra","Literature","AI with Python"],
+    "Codes":["DSP","ADC","L","TN","LTN","LDSP","LL","H","D"],
+    "Monday":{"TN":1,"ADC":1,"H":1,"L":1},
+    "Tuesday":{"L":1,"D":2,"H":1,"TN":1},
+    "Wednesday":{"L":1,"ADC":1,"H":1,"DSP":1,"D":1},
+    "Thursday":{"TN":1,"ADC":1,"DSP":1,"L":1,"LDSP":1},
+    "Friday":{"DSP":1,"ADC":1,"LTN":1},
+    "Saturday":{"DSP":1,"LL":1}
   }
 }
