@@ -37,14 +37,37 @@ let holidays = [
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 let batchData = {};
 
+function updateWorkingDaysCounter() {
+  const counterEl = document.getElementById('working-days-count');
+  const detailsEl = document.getElementById('working-days-details');
+  if (!counterEl) return;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const lastDay = new Date(lastWorkingDate);
+  lastDay.setHours(0, 0, 0, 0);
+
+  let workingDays = 0;
+  const d = new Date(today);
+  while (d <= lastDay) {
+    const iso = d.toISOString().split('T')[0];
+    const dayOfWeek = d.getDay();
+    // Count if not Sunday (0) and not a holiday
+    if (dayOfWeek !== 0 && !holidays.includes(iso)) {
+      workingDays++;
+    }
+    d.setDate(d.getDate() + 1);
+  }
+
+  counterEl.textContent = workingDays;
+  const fromDate = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const toDate = lastDay.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  detailsEl.textContent = `From ${fromDate} to ${toDate}`;
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
   const batchSelect = document.getElementById("batch-select");
   const subjectSelect = document.getElementById("subject");
-  // Holiday manager elements
-  const holidayListEl = document.getElementById('holiday-list');
-  const addHolidayBtn = document.getElementById('add-holiday-btn');
-  const newHolidayInput = document.getElementById('new-holiday-date');
-  const holidayFeedback = document.getElementById('holiday-feedback');
 
   try {
     const response = await fetch("batches.json");
@@ -84,6 +107,9 @@ window.addEventListener("DOMContentLoaded", async () => {
     console.error("Failed to load batch data:", err);
   }
 
+  // Update working days counter
+  updateWorkingDaysCounter();
+
   // Disable calculate button until all fields are filled
   const form = document.getElementById("attendance-form");
   const calculateBtn = form.querySelector("button[type='submit']");
@@ -103,64 +129,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
     calculateAttendance();
   });
-
-  // Render existing holidays as removable chips
-  function renderHolidays() {
-    if (!holidayListEl) return;
-    holidayListEl.innerHTML = '';
-    holidays.sort();
-    holidays.forEach(dateStr => {
-      const chip = document.createElement('span');
-      chip.textContent = dateStr;
-      chip.style.padding = '6px 10px';
-      chip.style.background = '#e0f2f1';
-      chip.style.borderRadius = '20px';
-      chip.style.fontSize = '0.8rem';
-      chip.style.display = 'flex';
-      chip.style.alignItems = 'center';
-      chip.style.gap = '6px';
-      chip.style.border = '1px solid #26a69a';
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.textContent = '✕';
-      removeBtn.style.background = 'transparent';
-      removeBtn.style.border = 'none';
-      removeBtn.style.cursor = 'pointer';
-      removeBtn.style.color = '#00796b';
-      removeBtn.style.fontSize = '0.9rem';
-      removeBtn.addEventListener('click', () => {
-        holidays = holidays.filter(h => h !== dateStr);
-        renderHolidays();
-        calculateAttendance();
-      });
-      chip.appendChild(removeBtn);
-      holidayListEl.appendChild(chip);
-    });
-  }
-  renderHolidays();
-
-  if (addHolidayBtn) {
-    addHolidayBtn.addEventListener('click', () => {
-      const val = newHolidayInput.value;
-      holidayFeedback.style.display = 'none';
-      if (!val) {
-        holidayFeedback.textContent = 'Select a date first.';
-        holidayFeedback.style.display = 'block';
-        return;
-      }
-      // Normalize
-      const iso = new Date(val).toISOString().split('T')[0];
-      if (holidays.includes(iso)) {
-        holidayFeedback.textContent = 'Holiday already exists.';
-        holidayFeedback.style.display = 'block';
-        return;
-      }
-      holidays.push(iso);
-      renderHolidays();
-      calculateAttendance();
-      newHolidayInput.value = '';
-    });
-  }
 });
 
 function calculateAttendance() {
@@ -289,23 +257,23 @@ function calculateAttendance() {
   progressBar.style.background = currentPct >= minAttendance ? 'linear-gradient(135deg,#4CAF50,#45a049)' : 'linear-gradient(135deg,#ff9800,#f57c00)';
   progressMeta.innerHTML = `Needed: ${minAttendance}% &middot; Remaining sessions considered: ${remaining}`;
 
-  // List all working days till lastWorkingDate grouped by week, format: Week DD/MM-DD/MM\nDay(DD):classCount
+  // List all working days till lastWorkingDate grouped by week
   let workingDays = [];
   const d2 = new Date(Math.max(currentDate, firstWorkingDate));
   d2.setHours(12,0,0,0);
   let weekStart = null;
   let weekEnd = null;
   let weekBuffer = [];
-  let displaySum = 0; // sum of per-day class counts for this subject
+  let displaySum = 0;
   const displayedDates = [];
   while (d2 <= lastWorkingDate) {
     const iso = d2.toISOString().split("T")[0];
     const [year, month, day] = iso.split("-");
+    const daySchedule = schedule[days[d2.getDay()]];
     let classCount = 0;
-    if (!holidays.includes(iso) && schedule[days[d2.getDay()]]) {
-      classCount = schedule[days[d2.getDay()]][subjectCode] || 0;
+    if (!holidays.includes(iso) && daySchedule) {
+      classCount = daySchedule[subjectCode] || 0;
       if (classCount > 0) {
-        // Set week start/end
         if (!weekStart) weekStart = `${day}/${month}`;
         weekEnd = `${day}/${month}`;
         weekBuffer.push(`${days[d2.getDay()].slice(0,3)}(${day}):${classCount} class(es)`);
@@ -313,7 +281,6 @@ function calculateAttendance() {
         displayedDates.push(`${iso}:${classCount}`);
       }
     }
-    // If it's Saturday or last day, flush week
     if (d2.getDay() === 6 || d2.getTime() === lastWorkingDate.getTime()) {
       if (weekBuffer.length > 0) {
         workingDays.push(`<b>${weekStart}-${weekEnd}</b><br>${weekBuffer.join('<br>')}`);
@@ -324,7 +291,6 @@ function calculateAttendance() {
     }
     d2.setDate(d2.getDate() + 1);
   }
-  // Final safety flush (in case loop exited without Saturday and buffer not empty)
   if (weekBuffer.length > 0) {
     workingDays.push(`<b>${weekStart}-${weekEnd}</b><br>${weekBuffer.join('<br>')}`);
   }

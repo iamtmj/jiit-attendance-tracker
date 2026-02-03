@@ -9,6 +9,15 @@
 <body>
   <main class="container">
     <h1>Attendance Manager</h1>
+    
+    <div class="working-days-banner">
+      <div class="counter-display">
+        <span id="working-days-count" class="counter-number">-</span>
+        <span class="counter-label">Working Days Left</span>
+      </div>
+      <div id="working-days-details" class="counter-details">Calculating...</div>
+    </div>
+
     <form id="attendance-form">
   <div id="form-errors" style="display:none;" aria-live="polite"></div>
       <label>Minimum Attendance Criteria (%):
@@ -47,20 +56,6 @@
       </div>
       <div id="progress-meta" style="font-size:0.9rem;color:#555;"></div>
     </div>
-    <details id="holiday-manager" style="background:#f8f9fa;padding:16px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-      <summary style="cursor:pointer;font-weight:600;color:#388e3c;">Manage Holidays</summary>
-      <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
-        <div>
-          <label style="font-weight:500;">Add Holiday Date:
-            <input type="date" id="new-holiday-date" style="margin-left:6px;" />
-          </label>
-          <button type="button" id="add-holiday-btn" style="margin-left:8px;max-width:120px;">Add</button>
-        </div>
-        <div id="holiday-feedback" style="font-size:0.85rem;color:#b00020;display:none;"></div>
-        <div id="holiday-list" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
-        <small style="color:#555;">Holidays apply immediately (session only). Remove or add to see updated remaining classes.</small>
-      </div>
-    </details>
     <section id="class-schedule"></section>
   </main>
 
