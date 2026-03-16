@@ -1,4 +1,4 @@
-const lastWorkingDate = new Date("2026-05-01");
+const lastWorkingDate = new Date("2026-05-04");
 // Normalize holiday dates into ISO (YYYY-MM-DD) format to ensure matches
 let holidays = [
   "2026-01-26",
